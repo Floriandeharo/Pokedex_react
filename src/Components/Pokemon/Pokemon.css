@@ -1,0 +1,13 @@
+.ten-pourcent{
+    width: 10%;
+}
+
+.type-button{
+    background: #007a80;
+    color: white;
+    border: none;
+    border-radius: 5px;
+    padding: 2%;
+    margin: 1%;
+    cursor: pointer;
+}

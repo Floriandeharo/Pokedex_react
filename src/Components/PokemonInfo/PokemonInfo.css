@@ -1,0 +1,24 @@
+.card-pokemon{
+    border: 1px solid gray;
+  padding: 3%;
+  margin-top: 3%;
+  margin-left: 15%;
+  width: 70%;
+  border-radius: 10px;
+  background: #007a8014;
+}
+
+.case-left{
+    background: #49494987;
+  border-radius: 0px 6px 0px 0px;
+}
+
+.case-middle{
+    background: #49494987;
+    border-radius: 6px 6px 0px 0px;
+}
+
+.case-right{
+    background: #49494987;
+  border-radius: 6px 0px 0px 0px;
+}
