@@ -9,7 +9,7 @@ import { Link } from 'react-router-dom';
 function App() {
   return (
     <div className="App">
-      <nav className="navbar navbar-expand-lg bg-body-tertiary">
+      <nav className="navbar navbar-expand-lg bg-body-tertiary "  >
         <div className="container-fluid">
           <img src="pokemon-title.png" alt="logo" className="img-fluid ten-pourcent" />
           <div className="collapse navbar-collapse" id="navbarSupportedContent">

@@ -1,9 +1,9 @@
-.card-pokemon{
+.card-info-pokemon{
     border: 1px solid gray;
   padding: 3%;
   margin-top: 3%;
-  margin-left: 15%;
-  width: 70%;
+  margin-left: 5%;
+  width: 50%;
   border-radius: 10px;
   background: #007a8014;
 }
