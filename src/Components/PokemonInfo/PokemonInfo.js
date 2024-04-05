@@ -28,32 +28,21 @@ return (
     <div>
         <div className='container-fluid'>
             <div className='row'>
-                <div className='col'>
-                    <Link className="btn btn-secondary " to="/">Retour</Link>
-                </div> 
-                <div className='col'>
                 
-                </div> 
-                <div className='col'>
-                
-                </div> 
-                <div className='col'>
-                
-                </div>
             </div>
             <div className='row'>
                 <div className='col-6'>
-                    <Link className="btn btn-primary " to={`/pokemon/info/${parseInt(pokemonId) - 1}`}> &lt;&lt; N {parseInt(pokemonId) - 1} </Link>
+                    <Link className="btn btn-primary " to={`/pokemon/info/${parseInt(pokemonId) - 1}`}> &laquo; n°{parseInt(pokemonId) - 1} </Link>
                 </div>
                 <div className='col-6'>
-                    <Link className="btn btn-primary " to={`/pokemon/info/${parseInt(pokemonId) + 1}`}>N {parseInt(pokemonId) + 1} </Link>
+                    <Link className="btn btn-primary " to={`/pokemon/info/${parseInt(pokemonId) + 1}`}> n°{parseInt(pokemonId) + 1} &raquo; </Link>
                 </div>
             </div>
             {pokemon ? (
                 <div className='card-pokemon'>
                     <h1>{pokemon.name.fr}</h1>
                     <img src={pokemon.sprites.regular} style={{width:"20em"}} alt={pokemon.name.fr} class="card-img "/>
-                    {pokemon.pokedex_id.toString().padStart(3, '0')}
+                    n°{pokemon.pokedex_id.toString().padStart(3, '0')}
                     <div >
                     <div className='container-fluid'>
                         <div className='row'>

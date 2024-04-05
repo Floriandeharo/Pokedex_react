@@ -6,17 +6,17 @@ async function getPokedexData() {
         const data = await response.json();
         return data;
     } catch (error) {
-        console.error('Une erreur s\'est produite lors de la récupération de la Pokédex:', error);
+        console.error('erreur', error);
         throw error;
     }
 }
 
 getPokedexData()
     .then(data => {
-        console.log('Pokédex récupéré avec succès:', data);
+        console.log('pokemon :', data);
     })
     .catch(error => {
-        console.error('Une erreur s\'est produite:', error);
+        console.error('erreur ', error);
     });
 
 async function getPokemonById(id) {

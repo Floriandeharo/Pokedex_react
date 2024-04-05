@@ -1,19 +1,16 @@
 import React, { useEffect, useState } from "react";
 import { getPokedexData, getTypes } from "../../services/apiPokemon";
 import { Link } from "react-router-dom";
-import './Pokemon.css';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
 import { faStar } from '@fortawesome/free-solid-svg-icons'
 
-const Pokemon = () => {
-
+const Pokedex = () => {
     const [pokemons, setPokemons] = useState([]);
-    
     const [types, setTypes] = useState([]);
     const [searchTerm, setSearchTerm] = useState("");
     const [selectedTypes, setSelectedTypes] = useState([]);
 
-    const [showFavorites, setShowFavorites] = useState(false);
+    const [showFavorites, setShowFavorites] = useState(true);
 
     const [favorites, setFavorites] = useState(() => {
         const storedFavorites = JSON.parse(localStorage.getItem('favorites'));
@@ -38,9 +35,9 @@ const Pokemon = () => {
 
 
 
-    const toggleShowFavorites = () => {
-        setShowFavorites(!showFavorites);
-    };
+    // const toggleShowFavorites = () => {
+    //     setShowFavorites(!showFavorites);
+    // };
     
     
     useEffect(() => {
@@ -114,8 +111,12 @@ const Pokemon = () => {
         <div>
             
             <div className="container-fluid mt-5">
+                <div className="row m-5">
+                    <h1 className="text-center">Pokedex</h1>
+                    </div>
                 <div className="row">
-                <form className="d-flex" role="search">
+                    <div className="col-6 d-flex align-items-center">
+                <form className="d-flex" style={{'width':'100%'}} role="search">
                             <input
                                 type="text"
                                 className="form-control"
@@ -125,7 +126,7 @@ const Pokemon = () => {
                             />
                         </form>
                 </div>
-                <div className="row">
+                <div className="col-6">
                     <div className="col-md-6 offset-md-3 mb-4">
                     {types.map((type) => (
                         <button
@@ -143,27 +144,30 @@ const Pokemon = () => {
 
                     </div>
                 </div>
+                </div>
                 <div className="row">
                     {filteredPokemons.slice(0, 100).map((pokemon) => (
 
                         
                         <div key={pokemon.entry_number} className="card" style={{ width: "18rem" }}>
                             <img  src={pokemon.sprites.regular} alt={pokemon.name.fr} className="card-img-top" />
-                            <div className="card-body">
-                                <h5 className="card-title">{pokemon.name.fr}</h5>
-                                <p className="card-text">n°{pokemon.pokedex_id.toString().padStart(3, '0')}</p>
-                                <button
-                                    className={`btn btn-primary ${favorites.some((fav) => fav.pokedex_id === pokemon.pokedex_id) ? 'active' : ''}`}
-                                    onClick={() => toggleFavorite(pokemon)}
-                                >
-                                    
-                                    <span className={`material-symbols-outlined ${favorites.some((fav) => fav.pokedex_id === pokemon.pokedex_id) ? 'material-symbols-outlined-fill' : ''}`}>
-                                        favorite
-                                    </span> 
-                                </button>
-                                <Link className="btn btn-primary" to={`/pokemon/info/${pokemon.pokedex_id}`}>
-                                    voir
-                                </Link>
+                                <div className="card-body">
+                                    <h5 className="card-title">{pokemon.name.fr}</h5>
+                                    <p className="card-text">n°{pokemon.pokedex_id.toString().padStart(3, '0')}</p>
+                                    <div className="d-flex justify-content-between">
+                                    <button
+                                        className={`btn btn-primary ${favorites.some((fav) => fav.pokedex_id === pokemon.pokedex_id) ? 'active' : ''}`}
+                                        onClick={() => toggleFavorite(pokemon)}
+                                    >
+                                        
+                                        <span className={`material-symbols-outlined ${favorites.some((fav) => fav.pokedex_id === pokemon.pokedex_id) ? 'material-symbols-outlined-fill' : ''}`}>
+                                            favorite
+                                        </span> 
+                                    </button>
+                                    <Link className="btn btn-primary" to={`/pokemon/info/${pokemon.pokedex_id}`}>
+                                        Consulter
+                                    </Link>
+                                </div>
                             </div>
                         </div>
                     ))}
@@ -173,4 +177,4 @@ const Pokemon = () => {
     );
 };
 
-export default Pokemon;
+export default Pokedex;
