@@ -1,7 +1,7 @@
 import React, { useEffect, useState } from "react";
 import { getPokedexData, getTypes } from "../../services/apiPokemon";
 import { Link } from "react-router-dom";
-import './Pokedex.css';
+import '../Pokemon/Pokemon.css';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
 import { faStar } from '@fortawesome/free-solid-svg-icons'
 
@@ -21,24 +21,18 @@ const Pokedex = () => {
     });
 
     const [colors, setColors] = useState([
-        '#A01F29',
-        '#5CAAB4',
+        // '#A01F29',
+        // '#5CAAB4',
         '#FFDD33',
-        '#91c169',
-        '#69c1ad',
-        '#9069c1',
-        '#c16995'
+        // '#91c169',
+        // '#69c1ad',
+        // '#9069c1',
+        // '#c16995'
     ]);
 
     const [bg_color, setBgColor] = useState('#FFDD33');
     const [currentPage, setCurrentPage] = useState(1);
     const pokemonsPerPage = 100;
-
-    
-    const clearFavorites = () => {
-        localStorage.removeItem('favorites');
-        setFavorites([]);
-    };
 
     useEffect(() => {
         const fetchPokemons = async () => {
@@ -57,6 +51,12 @@ const Pokedex = () => {
         setShowFavorites(!showFavorites);
     };
 
+        
+    const clearFavorites = () => {
+        localStorage.removeItem('favorites');
+        setFavorites([]);
+    };
+
     useEffect(() => {
         const fetchTypes = async () => {
             try {
@@ -69,6 +69,34 @@ const Pokedex = () => {
 
         fetchTypes();
     }, []);
+
+    const typeColors = {
+        "Normal": "gray",
+        "Feu": "#e07957",
+        "Eau": "#6390F0",
+        "Plante": "#8eb27b",
+        "Poison": "#cea0dc",
+        "Psy": "#c78799",
+        "Sol": "#c49684",
+        "Roche": "#c2baaa",
+        "Acier": "#829ed8",
+        "Vol": "#acc0eb",
+        "Électrik": "#f1f58f",
+        "Ténèbres": "#666664",
+        "Spectre": "#7a6398",
+        "Insecte": "#98c169",
+        "Fée": "#dc93d6",
+        "Dragon": "#5270b2",
+        "Combat": "#d6aa51",
+        "Glace": "#8297cf",
+        // Ajoutez d'autres types avec leurs couleurs correspondantes ici
+    };
+    
+    // Fonction pour récupérer la couleur associée à un type
+    const getTypeColor = (type) => {
+        return typeColors[type] || "#FFDD33"; // Couleur grise par défaut si le type n'est pas trouvé
+    };
+
 
     const handleSearch = (event) => {
         setSearchTerm(event.target.value);
@@ -130,14 +158,18 @@ const Pokedex = () => {
         setCurrentPage(pageNumber);
     };
 
+    
+    // #EE8130
+
     return (
-        <div>
+        <div style={{marginBottom:"20%"}}>
             <div className="container mt-5">
                 <div className="row m-5">
                     <h2 className="text-center">Pokedex</h2>
                 </div>
                 <hr />
-                <button className="btn btn-primary" onClick={clearFavorites}>Vider le pokedex </button>
+                <button className="btn type-button " onClick={clearFavorites}>Vider le pokedex </button>
+
                 <div className="row">
                     <h1 className="text-start">Filtre de recherche</h1>
                     <div className="col-6 d-flex align-items-center">
@@ -152,17 +184,19 @@ const Pokedex = () => {
                         </form>
                     </div>
                     <div className="col-6">
-                        <div className="">
+                        <div className="row">
                             {types.map((type) => (
+                                <div key={type.id} className="col-2 col-type-button">
                                 <button
                                     key={type.id}
-                                    className={`btn btn-primary m-1 type-button ${selectedTypes.includes(type.name.fr) ? 'active' : ''}`}
+                                    className={` m-1 type-button ${selectedTypes.includes(type.name.fr) ? 'active-type' : ''}`}
                                     onClick={() => handleFilterByType(type.name.fr)}
                                 >
                                     {type.name.fr}
                                 </button>
+                                </div>
                             ))}
-                            <button className="btn btn-primary m-1" onClick={resetFilter}>
+                            <button className="btn type-button  mt-3" style={{background: "#115559"}} onClick={resetFilter}>
                                 Reset
                             </button>
                         </div>
@@ -185,18 +219,26 @@ const Pokedex = () => {
                     </div>
                 </div>
                 <div className="row">
-                    {currentPokemons.map((pokemon) => (
+                    {currentPokemons.length === 0 && <h1>Aucun pokemon correspondant</h1>}
+                    {currentPokemons?.map((pokemon) => (
                         <div key={pokemon.entry_number} className="col-3 m-5">
-                            <div class="card-hulk" id="hulk">
-                                <div class="card-image" style={{ background: colors[Math.floor(Math.random() * colors.length)] }}>
+
+                        <div class="card-hulk" style={pokemon.types.length === 1 
+                                                        ? { background: getTypeColor(pokemon.types[0].name) } 
+                                                        : { 
+                                                            background: `linear-gradient(151deg, ${getTypeColor(pokemon.types[0].name)} 69%, ${getTypeColor(pokemon.types[1].name)} 70%)` 
+                                                        }} 
+                                                        id="hulk">
+
+                                <div class="card-image" >
                                     <img src={pokemon.sprites.regular} />
                                 </div>
                                 <br />
-                                <div class="card-text">
+                                <div class="card-text" >
                                     <p>{pokemon.name.fr}</p>
                                     <p>
                                         {pokemon.types.map((type) => (
-                                            <img key={type.id} src={type.image} className="img-type" alt={type.name} title={type.name} />
+                                            <img key={type.id} src={type.image} className="img-type rounded-circle" alt={type.name} title={type.name} />
                                         ))}
                                     </p>
                                     <div>
@@ -205,6 +247,7 @@ const Pokedex = () => {
                                                 <button
                                                     className={`btn ${favorites.some((fav) => fav.pokedex_id === pokemon.pokedex_id) ? 'active' : ''}`}
                                                     onClick={() => toggleFavorite(pokemon)}
+                                                    style={{ marginBottom: '10px' }}
                                                 >
                                                     <span className={`material-symbols-outlined ${favorites.some((fav) => fav.pokedex_id === pokemon.pokedex_id) ? 'material-symbols-outlined-fill' : ''}`}>
                                                         favorite
@@ -221,12 +264,13 @@ const Pokedex = () => {
                                                 </button>
                                             </span>
                                         </div>
-                                        <div><span className="number">  n°{pokemon.pokedex_id.toString().padStart(3, '0')}</span></div>
+                                        <div><span className="number ps-1">  n°{pokemon.pokedex_id.toString().padStart(3, '0')}</span></div>
                                     </div>
                                 </div>
                             </div>
                         </div>
                     ))}
+
                 </div>
             </div>
         </div>

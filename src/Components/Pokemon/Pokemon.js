@@ -21,13 +21,13 @@ const Pokemon = () => {
     });
 
     const [colors, setColors] = useState([
-        '#A01F29',
-        '#5CAAB4',
+        // '#A01F29',
+        // '#5CAAB4',
         '#FFDD33',
-        '#91c169',
-        '#69c1ad',
-        '#9069c1',
-        '#c16995'
+        // '#91c169',
+        // '#69c1ad',
+        // '#9069c1',
+        // '#c16995'
     ]);
 
     const [bg_color, setBgColor] = useState('#FFDD33');
@@ -63,6 +63,34 @@ const Pokemon = () => {
 
         fetchTypes();
     }, []);
+
+    const typeColors = {
+        "Normal": "gray",
+        "Feu": "#e07957",
+        "Eau": "#6390F0",
+        "Plante": "#8eb27b",
+        "Poison": "#cea0dc",
+        "Psy": "#c78799",
+        "Sol": "#c49684",
+        "Roche": "#c2baaa",
+        "Acier": "#829ed8",
+        "Vol": "#acc0eb",
+        "Électrik": "#f1f58f",
+        "Ténèbres": "#666664",
+        "Spectre": "#7a6398",
+        "Insecte": "#98c169",
+        "Fée": "#dc93d6",
+        "Dragon": "#5270b2",
+        "Combat": "#d6aa51",
+        "Glace": "#8297cf",
+        // Ajoutez d'autres types avec leurs couleurs correspondantes ici
+    };
+    
+    // Fonction pour récupérer la couleur associée à un type
+    const getTypeColor = (type) => {
+        return typeColors[type] || "#FFDD33"; // Couleur grise par défaut si le type n'est pas trouvé
+    };
+
 
     const handleSearch = (event) => {
         setSearchTerm(event.target.value);
@@ -124,8 +152,11 @@ const Pokemon = () => {
         setCurrentPage(pageNumber);
     };
 
+    
+    // #EE8130
+
     return (
-        <div>
+        <div style={{marginBottom:"20%"}}>
             <div className="container mt-5">
                 <div className="row m-5">
                     <h2 className="text-center">Liste Pokemon</h2>
@@ -133,7 +164,7 @@ const Pokemon = () => {
                 <hr />
                 <div className="row">
                     <h1 className="text-start">Filtre de recherche</h1>
-                    <div className="col-6 d-flex align-items-center">
+                    <div className="col-12 col-lg-6 d-flex align-items-center">
                         <form className="d-flex" style={{ 'width': '100%' }} role="search">
                             <input
                                 type="text"
@@ -144,18 +175,20 @@ const Pokemon = () => {
                             />
                         </form>
                     </div>
-                    <div className="col-6">
-                        <div className="">
+                    <div className="col-12 col-lg-6 mt-1">
+                        <div className="row">
                             {types.map((type) => (
+                                <div key={type.id} className="col-2 col-type-button">
                                 <button
                                     key={type.id}
-                                    className={`btn btn-primary m-1 type-button ${selectedTypes.includes(type.name.fr) ? 'active' : ''}`}
+                                    className={` m-1 type-button ${selectedTypes.includes(type.name.fr) ? 'active-type' : ''}`}
                                     onClick={() => handleFilterByType(type.name.fr)}
                                 >
                                     {type.name.fr}
                                 </button>
+                                </div>
                             ))}
-                            <button className="btn btn-primary m-1" onClick={resetFilter}>
+                            <button className="btn active mt-3" style={{background: "#115559"}} onClick={resetFilter}>
                                 Reset
                             </button>
                         </div>
@@ -178,18 +211,26 @@ const Pokemon = () => {
                     </div>
                 </div>
                 <div className="row">
-                    {currentPokemons.map((pokemon) => (
-                        <div key={pokemon.entry_number} className="col-3 m-5">
-                            <div class="card-hulk" id="hulk">
-                                <div class="card-image" style={{ background: colors[Math.floor(Math.random() * colors.length)] }}>
+                {currentPokemons.length === 0 && <h1>Aucun pokemon correspondant</h1>}
+                    {currentPokemons?.map((pokemon) => (
+                        <div key={pokemon.entry_number} className="col-12 col-lg-3 m-5">*
+
+                            <div class="card-hulk" style={pokemon.types.length === 1 
+                                ? { background: getTypeColor(pokemon.types[0].name) } 
+                                : { 
+                                    background: `linear-gradient(151deg, ${getTypeColor(pokemon.types[0].name)} 69%, ${getTypeColor(pokemon.types[1].name)} 70%)` 
+                                }} 
+                                id="hulk">
+                                
+                                <div class="card-image" >
                                     <img src={pokemon.sprites.regular} />
                                 </div>
                                 <br />
-                                <div class="card-text">
+                                <div class="card-text" >
                                     <p>{pokemon.name.fr}</p>
                                     <p>
                                         {pokemon.types.map((type) => (
-                                            <img key={type.id} src={type.image} className="img-type" alt={type.name} title={type.name} />
+                                            <img key={type.id} src={type.image} className="img-type rounded-circle" alt={type.name} title={type.name} />
                                         ))}
                                     </p>
                                     <div>
@@ -198,6 +239,7 @@ const Pokemon = () => {
                                                 <button
                                                     className={`btn ${favorites.some((fav) => fav.pokedex_id === pokemon.pokedex_id) ? 'active' : ''}`}
                                                     onClick={() => toggleFavorite(pokemon)}
+                                                    style={{ marginBottom: '10px' }}
                                                 >
                                                     <span className={`material-symbols-outlined ${favorites.some((fav) => fav.pokedex_id === pokemon.pokedex_id) ? 'material-symbols-outlined-fill' : ''}`}>
                                                         favorite
@@ -214,12 +256,13 @@ const Pokemon = () => {
                                                 </button>
                                             </span>
                                         </div>
-                                        <div><span className="number">  n°{pokemon.pokedex_id.toString().padStart(3, '0')}</span></div>
+                                        <div><span className=" number ps-1">  n°{pokemon.pokedex_id.toString().padStart(3, '0')}</span></div>
                                     </div>
                                 </div>
                             </div>
                         </div>
                     ))}
+
                 </div>
             </div>
         </div>

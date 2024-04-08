@@ -32,6 +32,15 @@ function App() {
           <Route path="/pokemon/pokedex" element={<Pokedex />} />
         </Routes>
       </Router>
+
+      <footer class="bg-dark text-light text-center text-lg-start mt-3">
+        
+        <div class="text-center p-3" style={{"backgroundColor": "rgba(0, 0, 0, 0.05)"}}>
+          © 2024 Copyright: PokeIpssi
+          
+        </div>
+        
+      </footer>
     </div>
   );
 }
